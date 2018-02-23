@@ -1,3 +1,4 @@
+const UNKNOWN: &str = "und";
 
 #[allow(dead_code)]
 pub fn find_language(text: &str) -> Result {
@@ -9,7 +10,7 @@ pub fn find_language(text: &str) -> Result {
 }
 
 pub struct Result {
-    pub language: String, // TODO: default value
+    pub language: String,
     pub probability: f64,
     pub is_reliable: bool,
     pub proportion: f64
@@ -18,7 +19,7 @@ pub struct Result {
 impl Default for Result {
     fn default() -> Result {
         Result {
-            language: "unknown".to_string(), // TODO: kUnknown
+            language: UNKNOWN.to_string(),
             probability: 0.0,
             is_reliable: false,
             proportion: 0.0
