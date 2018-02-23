@@ -14,8 +14,14 @@ impl NNetLanguageIdentifier {
         assert!(min_num_bytes >= 0);
         assert!(min_num_bytes < max_num_bytes);
 
+        // TODO: num_languages, network
+
         let num_snippets = if max_num_bytes <= NUM_SNIPPETS { 1 } else { NUM_SNIPPETS };
         let snippet_size = max_num_bytes / num_snippets;
+
+        // TODO: WholeSentenceFeature
+
+        // TODO: TaskContext
 
         return Self{
             min_num_bytes: min_num_bytes,
