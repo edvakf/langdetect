@@ -6,7 +6,8 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let result = nnet_language_identifier::find_language("吾輩は猫である");
+        let identifier = nnet_language_identifier::NNetLanguageIdentifier::new();
+        let result = identifier.find_language("吾輩は猫である");
         println!("{}", result.language);
     }
 }

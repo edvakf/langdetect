@@ -1,12 +1,22 @@
 const UNKNOWN: &str = "und";
 
-#[allow(dead_code)]
-pub fn find_language(text: &str) -> Result {
-    println!("{}", text);
-    return Result{
-        language: String::from("ja"),
-        ..Default::default()
-    };
+pub struct NNetLanguageIdentifier {
+    // TODO LanguageIdEmbeddingFeatureExtractor feature_extractor_ etc.
+}
+
+impl NNetLanguageIdentifier {
+    pub fn new() -> Self {
+        return Self{};
+    }
+
+    #[allow(dead_code)]
+    pub fn find_language(self, text: &str) -> Result {
+        println!("{}", text);
+        return Result{
+            language: String::from("ja"),
+            ..Default::default()
+        };
+    }
 }
 
 pub struct Result {
