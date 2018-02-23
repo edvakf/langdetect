@@ -1,4 +1,5 @@
 mod nnet_language_identifier;
+mod task_context_params;
 
 #[cfg(test)]
 mod tests {
