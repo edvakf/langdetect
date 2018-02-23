@@ -1,0 +1,6 @@
+[package]
+name = "cld3"
+version = "0.1.0"
+authors = ["Atsushi Takayama <taka.atsushi@gmail.com>"]
+
+[dependencies]
