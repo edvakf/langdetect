@@ -1,12 +1,16 @@
 const UNKNOWN: &str = "und";
 
 pub struct NNetLanguageIdentifier {
-    // TODO LanguageIdEmbeddingFeatureExtractor feature_extractor_ etc.
+    min_num_bytes: i32,
+    max_num_bytes: i32
 }
 
 impl NNetLanguageIdentifier {
-    pub fn new() -> Self {
-        return Self{};
+    pub fn new(min_num_bytes: i32, max_num_bytes: i32) -> Self {
+        return Self{
+            min_num_bytes: min_num_bytes,
+            max_num_bytes: max_num_bytes
+        };
     }
 
     #[allow(dead_code)]
