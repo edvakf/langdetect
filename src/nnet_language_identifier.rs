@@ -10,6 +10,10 @@ pub struct NNetLanguageIdentifier {
 
 impl NNetLanguageIdentifier {
     pub fn new(min_num_bytes: i32, max_num_bytes: i32) -> Self {
+        assert!(max_num_bytes > 0);
+        assert!(min_num_bytes >= 0);
+        assert!(min_num_bytes < max_num_bytes);
+
         let num_snippets = if max_num_bytes <= NUM_SNIPPETS { 1 } else { NUM_SNIPPETS };
         let snippet_size = max_num_bytes / num_snippets;
 
