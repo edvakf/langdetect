@@ -38,7 +38,17 @@ impl NNetLanguageIdentifier {
 
     #[allow(dead_code)]
     pub fn find_language(self, text: &str) -> Result {
-        println!("{}", text);
+
+        // TODO: check valid utf-8 sequence
+        // TODO: strip HTML tags
+        let t = truncate_to_at_most_n_bytes(text, 2);
+
+        // lower case
+
+        // CheapSqueezeInplace of text
+
+
+        println!("{}", t);
         return Result{
             language: String::from("ja"),
             ..Default::default()
@@ -62,4 +72,33 @@ impl Default for Result {
             proportion: 0.0
         }
    }
+}
+
+fn truncate_to_at_most_n_bytes(s: &str, n: usize) -> String {
+    let chars: String = s
+        .char_indices()
+        .take_while(|&(i, c)| i + c.len_utf8() <= n)
+        .map(|(_, c)| c)
+        .collect();
+    return chars;
+}
+
+#[cfg(test)]
+mod tests {
+    use super::truncate_to_at_most_n_bytes;
+
+    #[test]
+    fn test_truncate_to_at_most_n_bytes() {
+        assert_eq!(truncate_to_at_most_n_bytes("abcde", 0), String::from(""));
+        assert_eq!(truncate_to_at_most_n_bytes("abcde", 1), String::from("a"));
+        assert_eq!(truncate_to_at_most_n_bytes("abcde", 2), String::from("ab"));
+        assert_eq!(truncate_to_at_most_n_bytes("abcde", 10), String::from("abcde"));
+        assert_eq!(truncate_to_at_most_n_bytes("吾輩は猫である", 0), String::from(""));
+        assert_eq!(truncate_to_at_most_n_bytes("吾輩は猫である", 1), String::from(""));
+        assert_eq!(truncate_to_at_most_n_bytes("吾輩は猫である", 2), String::from(""));
+        assert_eq!(truncate_to_at_most_n_bytes("吾輩は猫である", 3), String::from("吾"));
+        assert_eq!(truncate_to_at_most_n_bytes("吾輩は猫である", 4), String::from("吾"));
+        assert_eq!(truncate_to_at_most_n_bytes("吾輩は猫である", 5), String::from("吾"));
+        assert_eq!(truncate_to_at_most_n_bytes("吾輩は猫である", 6), String::from("吾輩"));
+    }
 }
