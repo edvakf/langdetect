@@ -41,7 +41,7 @@ impl NNetLanguageIdentifier {
 
         // TODO: check valid utf-8 sequence
         // TODO: strip HTML tags
-        let t = truncate_to_at_most_n_bytes(text, 2);
+        let t = parepare_input_text(text, 2);
 
         // lower case
 
@@ -74,31 +74,41 @@ impl Default for Result {
    }
 }
 
-fn truncate_to_at_most_n_bytes(s: &str, n: usize) -> String {
-    let chars: String = s
+fn parepare_input_text(s: &str, n: usize) -> String {
+    return s
+        .chars()
+        .filter(|c| c.is_alphabetic())
+        .flat_map(|c| c.to_lowercase())
+        .collect::<String>() // TODO: can be done without collect()ing?
         .char_indices()
         .take_while(|&(i, c)| i + c.len_utf8() <= n)
         .map(|(_, c)| c)
-        .collect();
-    return chars;
+        .collect::<String>();
 }
 
 #[cfg(test)]
 mod tests {
-    use super::truncate_to_at_most_n_bytes;
+    use super::parepare_input_text;
 
     #[test]
-    fn test_truncate_to_at_most_n_bytes() {
-        assert_eq!(truncate_to_at_most_n_bytes("abcde", 0), String::from(""));
-        assert_eq!(truncate_to_at_most_n_bytes("abcde", 1), String::from("a"));
-        assert_eq!(truncate_to_at_most_n_bytes("abcde", 2), String::from("ab"));
-        assert_eq!(truncate_to_at_most_n_bytes("abcde", 10), String::from("abcde"));
-        assert_eq!(truncate_to_at_most_n_bytes("吾輩は猫である", 0), String::from(""));
-        assert_eq!(truncate_to_at_most_n_bytes("吾輩は猫である", 1), String::from(""));
-        assert_eq!(truncate_to_at_most_n_bytes("吾輩は猫である", 2), String::from(""));
-        assert_eq!(truncate_to_at_most_n_bytes("吾輩は猫である", 3), String::from("吾"));
-        assert_eq!(truncate_to_at_most_n_bytes("吾輩は猫である", 4), String::from("吾"));
-        assert_eq!(truncate_to_at_most_n_bytes("吾輩は猫である", 5), String::from("吾"));
-        assert_eq!(truncate_to_at_most_n_bytes("吾輩は猫である", 6), String::from("吾輩"));
+    fn test_parepare_input_text() {
+        // returns only up to n bytes
+        assert_eq!(parepare_input_text("abcde", 0), String::from(""));
+        assert_eq!(parepare_input_text("abcde", 1), String::from("a"));
+        assert_eq!(parepare_input_text("abcde", 2), String::from("ab"));
+        assert_eq!(parepare_input_text("abcde", 10), String::from("abcde"));
+        assert_eq!(parepare_input_text("吾輩は猫である", 0), String::from(""));
+        assert_eq!(parepare_input_text("吾輩は猫である", 1), String::from(""));
+        assert_eq!(parepare_input_text("吾輩は猫である", 2), String::from(""));
+        assert_eq!(parepare_input_text("吾輩は猫である", 3), String::from("吾"));
+        assert_eq!(parepare_input_text("吾輩は猫である", 4), String::from("吾"));
+        assert_eq!(parepare_input_text("吾輩は猫である", 5), String::from("吾"));
+        assert_eq!(parepare_input_text("吾輩は猫である", 6), String::from("吾輩"));
+        // remove digits and punctuations
+        assert_eq!(parepare_input_text("a.bcde", 2), String::from("ab"));
+        assert_eq!(parepare_input_text("a`b1c*d>e", 6), String::from("abcde"));
+        assert_eq!(parepare_input_text("あ。い５うえお", 12), String::from("あいうえ")); // removes non-ascii punctuations as well
+        // convert to lower case
+        assert_eq!(parepare_input_text("AbCdE", 10), String::from("abcde"));
     }
 }
