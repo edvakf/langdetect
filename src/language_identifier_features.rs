@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use feature_extractor;
 use utils;
-// use sentence_features;
+use sentence_features;
 use feature_types;
 
 // embed base class
@@ -53,21 +53,25 @@ struct ContinuousBagOfNgramsFunction {
     feature_type: NumericFeatureType
 }
 
-impl feature_extractor::GenericFeatureFunction<NumericFeatureType> for ContinuousBagOfNgramsFunction {
+impl sentence_features::WholeSentenceFeature for ContinuousBagOfNgramsFunction {
+    fn set_feature_type(&mut self, feature_type: feature_types::FeatureType) {
+        // originally this sets a pointer feature_type_, so it should really be Optional
+        self.feature_type = feature_type;
+    }
+
+    fn feature_type(&self) -> &feature_types::FeatureType {
+        &self.feature_type
+    }
+
     fn init(&mut self) {
-        // originally this is a set_feature_type which sets a pointer feature_type_, so it should really be Optional
-        self.feature_type = NumericFeatureType::new(
+        self.set_feature_type(NumericFeatureType::new(
             "continuous-bag-of-ngrams".to_string(), // originally implemented in GenericFeatureFunction's name() method which pulls the name from FML
             self.ngram_id_dimension as feature_extractor::FeatureValue // cast i32 to i64
-        );
+        ));
     }
-}
-
-impl feature_extractor::FeatureFunction<NumericFeatureType> for ContinuousBagOfNgramsFunction {
-    type Obj = String;
 
     #[allow(dead_code)]
-    fn evaluate(&self, sentence: Self::Obj) -> feature_extractor::FeatureVector<NumericFeatureType> {
+    fn evaluate(&self, sentence: String) -> feature_extractor::FeatureVector {
         let mut s: String;
         // let mut chars;
 
