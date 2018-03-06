@@ -12,7 +12,7 @@ pub type FeatureValue = Predicate;
 // here we use transmute_copy
 pub struct FloatFeatureValue {
     pub id: u32,
-    pub weight: f32
+    pub weight: f32,
 }
 
 impl FloatFeatureValue {
@@ -25,27 +25,10 @@ impl FloatFeatureValue {
     }
 }
 
-pub type FeatureVector<'a, T: feature_types::FeatureType> = Vec<(&'a T, FeatureValue)>;
-
-pub trait GenericFeatureFunction<T: feature_types::FeatureType> {
-    // fn setup(self);
-    fn init(&mut self);
-}
+pub type FeatureVector<'a> = Vec<(&'a feature_types::FeatureType, FeatureValue)>;
 
 // originally GenericFeatureFunction's constexpr `kNone`
-const NONE: FeatureValue = -1;
-
-pub trait FeatureFunction<T: feature_types::FeatureType> {
-    type Obj;
-
-    fn evaluate(&self, obj: Self::Obj) -> FeatureVector<T>; // TODO: workspace and args
-
-    // fn compute(&self, obj: Self::Obj) -> FeatureValue {
-    //     return NONE;
-    // }
-}
-
-// type WholeSentenceFeature = FeatureFunction<Sentence>;
+pub const NONE: FeatureValue = -1;
 
 #[cfg(test)]
 mod tests {
@@ -53,8 +36,11 @@ mod tests {
 
     #[test]
     fn test_FloatFeatureValue() {
-        assert_eq!(FloatFeatureValue{id: 0, weight: 0.0}.discrete_value(), 0);
-        assert_eq!(FloatFeatureValue{id: 1, weight: 0.0}.discrete_value(), 1);
-        assert_eq!(FloatFeatureValue{id: 0, weight: 1.0}.discrete_value(), 4575657221408423936);
+        assert_eq!(FloatFeatureValue { id: 0, weight: 0.0 }.discrete_value(), 0);
+        assert_eq!(FloatFeatureValue { id: 1, weight: 0.0 }.discrete_value(), 1);
+        assert_eq!(
+            FloatFeatureValue { id: 0, weight: 1.0 }.discrete_value(),
+            4575657221408423936
+        );
     }
 }

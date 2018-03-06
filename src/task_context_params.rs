@@ -30,6 +30,14 @@ const LANGUAGE_IDENTIFIER_EMBEDDING_DIMS: &str =
 // fn ToTaskContext(context task_context::TaskContext) {
 //
 // }
+// void TaskContextParams::ToTaskContext(TaskContext *context) {
+//   context->SetParameter("language_identifier_features",
+//                         kLanguageIdentifierFeatures);
+//   context->SetParameter("language_identifier_embedding_names",
+//                         kLanguageIdentifierEmbeddingNames);
+//   context->SetParameter("language_identifier_embedding_dims",
+//                         kLanguageIdentifierEmbeddingDims);
+// }
 
 pub fn GetNumLanguages() -> i32 {
     return LANGUAGE_NAMES.len() as i32; // is it safe enough?
