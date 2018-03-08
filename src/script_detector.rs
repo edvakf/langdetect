@@ -2,7 +2,7 @@
 // a few Unicode scripts that offer a strong indication about the language of
 // the text (e.g., Hiragana -> Japanese).
 #[derive(PartialEq, Debug)]
-enum Script {
+pub enum Script {
     // Special value to indicate internal errors in the script detection code.
     ScriptError,
 
@@ -35,7 +35,7 @@ fn in_range<T: Ord>(value: T, low: T, hi: T) -> bool {
     (value >= low) && (value <= hi)
 }
 
-fn get_script(c: char) -> Script {
+pub fn get_script(c: char) -> Script {
     match c.len_utf8() {
         1 => {
             return Script::ScriptOtherUtf8OneByte;
