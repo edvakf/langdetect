@@ -11,11 +11,18 @@ pub type FeatureValue = Predicate;
 // original version uses C++ union to reinterpret (u32, f32) into i64
 // here we use transmute_copy
 pub struct FloatFeatureValue {
-    pub id: u32,
-    pub weight: f32,
+    id: u32,
+    weight: f32,
 }
 
 impl FloatFeatureValue {
+    pub fn new(id: u32, weight: f32) -> FloatFeatureValue {
+        return FloatFeatureValue {
+            id: id,
+            weight: weight,
+        };
+    }
+
     pub fn discrete_value(self) -> FeatureValue {
         let value: FeatureValue;
         unsafe {

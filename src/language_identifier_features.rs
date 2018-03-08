@@ -160,20 +160,18 @@ impl sentence_features::WholeSentenceFeature for ContinuousBagOfNgramsFunction {
         let mut feature_vector = feature_extractor::FeatureVector::new();
 
         for (key, count) in &char_ngram_counts {
-            let feature_value = feature_extractor::FloatFeatureValue {
-                id: utils::has32_with_default_seed(key),
-                weight: if self.use_equal_ngram_weight {
-                    equal_weight
-                } else {
-                    *count as f32 / norm
-                },
-            }.discrete_value();
-            // println!("{}", key);
-            // println!("{}", utils::has32_with_default_seed(key));
-            // println!("{}", feature_value);
+            let weight = if self.use_equal_ngram_weight {
+                equal_weight
+            } else {
+                *count as f32 / norm
+            };
+            let feature_value = feature_extractor::FloatFeatureValue::new(
+                utils::has32_with_default_seed(key),
+                weight,
+            );
             feature_vector.push((
                 self.feature_type() as &feature_types::FeatureType,
-                feature_value,
+                feature_value.discrete_value(),
             ));
         }
 
